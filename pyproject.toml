@@ -1,0 +1,70 @@
+[tool.poetry]
+name = "neopy"
+version = "0.1.0"
+description = "A Neovim GUI that works."
+authors = []
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+dearpygui = "^1.8.0"
+
+[tool.poetry.group.dev.dependencies]
+pre-commit = "^2.20.0"
+pytest = "^7.2.0"
+ruff = "^0.0.189"
+black = "^22.12.0"
+taskipy = "^1.10.3"
+pytest-cov = "^4.0.0"
+isort = "^5.11.3"
+debugpy = "^1.6.4"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+# poetry run task start - lint - html etc/
+[tool.taskipy.tasks]
+start = "python -m src"
+lint = "pre-commit run --all-files"
+precommit = "pre-commit install"
+test-nocov = "pytest -n auto"
+test = "pytest -n auto --cov-report= --cov --ff"
+retest = "pytest -n auto --cov-report= --cov --lf"
+isort = "isort ."
+
+[tool.coverage.run]
+parallel = true
+branch = true
+source_pkgs = ["src"]
+source = ["tests"]
+omit = ["**/__main__.py"]
+
+[tool.coverage.report]
+show_missing = true
+fail_under = 0 # temp
+precision = 2
+exclude_lines = ["pragma: no cover", "pass"]
+
+[tool.isort]
+multi_line_output = 6
+order_by_type = false
+case_sensitive = true
+combine_as_imports = true
+line_length = 120
+atomic = true
+
+[tool.ruff]
+line-length = 150
+
+[tool.pycln]
+all = true
+
+[tool.pytest.ini_options]
+# skip slow tests by default
+addopts = "-m 'not slow'"
+markers = [
+    "slow: marks tests as slow"
+]
+xfail_strict=true
